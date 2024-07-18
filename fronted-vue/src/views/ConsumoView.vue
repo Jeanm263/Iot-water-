@@ -1,0 +1,256 @@
+<template>
+  <ProtectedNavbar />
+
+  <div class="content">
+    <div class="header">
+      <p>Consumo y Frecuencia</p>
+    </div>
+
+    <div class="info-section">
+      <p>Información</p>
+    </div>
+
+    <!-- Contenedor para los gráficos -->
+    <div class="chart-container">
+      <!-- Gráfico de líneas -->
+      <div class="chart-item">
+        <canvas id="lineChart"></canvas>
+      </div>
+
+      <!-- Gráfico de frecuencia -->
+      <div class="chart-item">
+        <canvas id="frequencyChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Tabla de consumo -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre y Apellido</th>
+            <th>Consumo A</th>
+            <th>Consumo B</th>
+            <th>Ciudad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.id">
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.consumoA }}</td>
+            <td>{{ user.consumoB }}</td>
+            <td>{{ user.ciudad }}</td>
+            <td>
+              <button class="action-button update">Actualizar</button>
+              <button class="action-button invoice">Factura</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref, onMounted } from "vue";
+import Chart from "chart.js/auto";
+import ProtectedNavbar from "../components/ProtectedNavbar.vue";
+
+export default {
+  name: "iot",
+  components: {
+    ProtectedNavbar,
+  },
+  setup() {
+    const users = ref([
+      { id: 1, name: "Nuevo y bacan", consumoA: "E1-123", consumoB: "E1-123", ciudad: "quito" },
+      { id: 2, name: "Nuevo y bacan", consumoA: "E1-123", consumoB: "E1-123", ciudad: "Guayaquil" },
+      { id: 3, name: "Nuevo y bacan", consumoA: "E1-123", consumoB: "E1-123", ciudad: "Guayas" },
+    ]);
+
+    const lineChartData = ref({
+      labels: ["May 15", "May 19", "May 22", "May 25", "May 28", "May 31"],
+      datasets: [
+        {
+          label: "Page Views",
+          data: [50, 60, 70, 80, 90, 100],
+          borderColor: "#36A2EB",
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          fill: true,
+        },
+        {
+          label: "Visitors",
+          data: [20, 30, 40, 50, 60, 70],
+          borderColor: "#FF6384",
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          fill: true,
+        },
+      ],
+    });
+
+    const frequencyChartData = ref({
+      labels: ['0.1', '1', '10', '100', '1000', '10000'],
+      datasets: [
+        {
+          label: 'EMP (Q3=2.5m³/h y R250)',
+          data: [2, 2, 2, 2, 2, 2],
+          borderColor: "#FF0000",
+          backgroundColor: "rgba(255, 0, 0, 0.2)",
+          borderWidth: 1,
+          fill: false,
+        },
+        {
+          label: 'Error típico mecánico',
+          data: [2, 1, 0, -1, -2, -2],
+          borderColor: "#00FF00",
+          backgroundColor: "rgba(0, 255, 0, 0.2)",
+          borderWidth: 1,
+          fill: false,
+        },
+        {
+          label: 'Error típico estático',
+          data: [2, 1, 0, -1, -1, -1],
+          borderColor: "#0000FF",
+          backgroundColor: "rgba(0, 0, 255, 0.2)",
+          borderWidth: 1,
+          fill: false,
+        }
+      ]
+    });
+
+    onMounted(() => {
+      const lineCtx = document.getElementById("lineChart").getContext("2d");
+      new Chart(lineCtx, {
+        type: "line",
+        data: lineChartData.value,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "top",
+            },
+          },
+        },
+      });
+
+      const frequencyCtx = document.getElementById("frequencyChart").getContext("2d");
+      new Chart(frequencyCtx, {
+        type: 'line',
+        data: frequencyChartData.value,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+          },
+          scales: {
+            x: {
+              type: 'logarithmic',
+              position: 'bottom',
+              title: {
+                display: true,
+                text: 'Caudal (litros/hora)'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Error de medida'
+              }
+            }
+          }
+        }
+      });
+    });
+
+    return { users, lineChartData, frequencyChartData };
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    },
+  },
+};
+</script>
+
+<style scoped>
+.content {
+  padding: 20px;
+  text-align: center;
+}
+
+.header {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.create-button {
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #00a896;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.chart-item {
+  width: 45%;
+}
+
+.table-container {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.action-button {
+  margin: 2px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.action-button.update {
+  background-color: #ffc107;
+  color: black;
+}
+
+.action-button.invoice {
+  background-color: #28a745;
+  color: white;
+}
+</style>
