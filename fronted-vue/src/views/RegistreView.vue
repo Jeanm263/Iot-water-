@@ -121,7 +121,7 @@ body {
 .right {
   flex: 1;
   transition: 1s;
-  /*background-image: url("/public/img/login.png");*/
+  background-image: url("/public/img/login.jpeg"); /*imagen registro */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

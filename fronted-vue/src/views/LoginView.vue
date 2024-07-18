@@ -104,14 +104,14 @@ body {
 .right {
   flex: 1;
   transition: 1s;
-  /*background-image: url("/public/img/registro.png");*/
+  background-image: url("/public/img/login.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .header > h2 {
-  color: #4f46a5;
+  color: #3822ff;
 }
 
 .form {
@@ -139,13 +139,13 @@ body {
 }
 
 .form-field:focus {
-  border-color: #0f7ef1;
+  border-color: #007bff;
 }
 
 .form > button {
   padding: 12px 10px;
   border: 0;
-  background: linear-gradient(to right, #656ed3 0%, #afb3ff 100%);
+  background: linear-gradient(to right, #65a1d3 0%, #afb3ff 100%);
   border-radius: 15px;
   margin: 5px;
   color: #fff;
