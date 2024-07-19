@@ -22,7 +22,7 @@
         <canvas id="frequencyChart"></canvas>
       </div>
     </div>
-
+    <hr>
     <!-- Tabla de consumo -->
     <div class="table-container">
       <table>
@@ -44,8 +44,8 @@
             <td>{{ user.consumoB }}</td>
             <td>{{ user.ciudad }}</td>
             <td>
-              <button class="action-button update">Actualizar</button>
-              <button class="action-button invoice">Factura</button>
+              <button class="action-button update" @click="updateCharts">Actualizar</button>
+              <button class="action-button invoice" @click="invoiceUser(user.id)">Factura</button>
             </td>
           </tr>
         </tbody>
@@ -72,7 +72,7 @@ export default {
     ]);
 
     const lineChartData = ref({
-      labels: ["May 15", "May 19", "May 22", "May 25", "May 28", "May 31"],
+      labels: ["junio", "julio", "agosto", "septiembre", "octubre", "noviembre"],
       datasets: [
         {
           label: "Page Views",
@@ -121,9 +121,12 @@ export default {
       ]
     });
 
+    let lineChartInstance = null;
+    let frequencyChartInstance = null;
+
     onMounted(() => {
       const lineCtx = document.getElementById("lineChart").getContext("2d");
-      new Chart(lineCtx, {
+      lineChartInstance = new Chart(lineCtx, {
         type: "line",
         data: lineChartData.value,
         options: {
@@ -137,7 +140,7 @@ export default {
       });
 
       const frequencyCtx = document.getElementById("frequencyChart").getContext("2d");
-      new Chart(frequencyCtx, {
+      frequencyChartInstance = new Chart(frequencyCtx, {
         type: 'line',
         data: frequencyChartData.value,
         options: {
@@ -167,7 +170,25 @@ export default {
       });
     });
 
-    return { users, lineChartData, frequencyChartData };
+    const updateCharts = () => {
+      // Nuevos datos de ejemplo
+      lineChartData.value.datasets[0].data = [60, 70, 80, 90, 100, 110];
+      lineChartData.value.datasets[1].data = [30, 40, 50, 60, 70, 80];
+
+      frequencyChartData.value.datasets[0].data = [3, 3, 3, 3, 3, 3];
+      frequencyChartData.value.datasets[1].data = [1, 0, -1, -2, -3, -3];
+      frequencyChartData.value.datasets[2].data = [1, 0, -1, -2, -2, -2];
+
+      // Actualizar las gráficas
+      lineChartInstance.update();
+      frequencyChartInstance.update();
+    };
+
+    const invoiceUser = (userId) => {
+      alert(`Facturando usuario con ID: ${userId}`);
+    };
+
+    return { users, lineChartData, frequencyChartData, updateCharts, invoiceUser };
   },
   methods: {
     logout() {

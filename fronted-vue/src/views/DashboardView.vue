@@ -2,8 +2,17 @@
   <ProtectedNavbar />
 
   <div class="content">
-    <div class="header">
-      <p>Dashboard</p>
+    <!-- Contenedor para los gráficos -->
+    <div class="chart-container">
+      <!-- Gráfico de barras -->
+      <div class="chart-item">
+        <canvas id="barChart"></canvas>
+      </div>
+
+      <!-- Gráfico de líneas -->
+      <div class="chart-item larger-chart">
+        <canvas id="lineChart"></canvas>
+      </div>
     </div>
 
     <!-- Tabla de porcentajes -->
@@ -24,19 +33,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <!-- Contenedor para los gráficos -->
-    <div class="chart-container">
-      <!-- Gráfico de barras -->
-      <div class="chart-item">
-        <canvas id="barChart"></canvas>
-      </div>
-
-      <!-- Gráfico de líneas -->
-      <div class="chart-item larger-chart">
-        <canvas id="lineChart"></canvas>
-      </div>
     </div>
   </div>
 </template>
@@ -137,31 +133,6 @@ export default {
   font-weight: bold;
 }
 
-.table-container {
-  margin-top: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  padding: 10px;
-  width: 500px; /* Ajusta el tamaño de la tabla */
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
 .chart-container {
   margin-top: 20px;
   display: flex;
@@ -179,5 +150,33 @@ th {
 canvas {
   width: 100% !important; /* Asegura que el canvas llene su contenedor */
   height: auto !important; /* Asegura que el canvas mantenga la proporción */
+}
+
+.table-container {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  width: 80%; /* Ajusta el tamaño de la tabla */
+  max-width: 800px; /* Ajusta el tamaño máximo de la tabla */
+  margin-left: auto;
+  margin-right: auto; /* Centra horizontalmente */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
 }
 </style>
