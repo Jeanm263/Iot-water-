@@ -121,14 +121,14 @@ export default {
 .right {
   flex: 1;
   transition: 1s;
-  background-image: url("/public/img/registro.png");
+  background-image: url("/public/img/agua3.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .header > h1 {
-  color: #4f46a5;
+  color: #0f7ef1;
 text-align: center;
 }
 .form {
@@ -147,7 +147,7 @@ text-align: center;
 .form-field {
   height: 30px;
   padding: 20px;
-  border: 2px solid #656ed3;
+  border: 2px solid #0f7ef1;
   border-radius: 15px;
   outline: 0;
   transition: 0.2s;
@@ -161,11 +161,15 @@ text-align: center;
 .form > button {
   padding: 10px 10px;
   border: 0;
-  background: linear-gradient(to right, #656ed3 0%, #afb3ff 100%);
+  background: linear-gradient(to right, #0f7ef1 0%, #e8e9ff 100%);
   border-radius: 15px;
   margin: 5px;
   color: #fff;
   letter-spacing: 1px;
+}
+
+.form > button:hover {
+  background: linear-gradient(to right, #4453fd 0%, #afb3ff 100%);
 }
 
 .animation {
