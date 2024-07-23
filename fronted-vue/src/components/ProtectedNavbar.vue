@@ -6,6 +6,14 @@
           <img src="../assets/logo.png" alt="IOT WATER logo" class="navbar-logo" />
         </router-link>
       </div>
+      <hr>
+      <div class="user-profile">
+        <img src="../assets/usuario.png" alt="User Profile" class="profile-picture" />
+        <div class="user-info">
+          <p>Sean Ngu</p>
+          <p>Frontend developer</p>
+        </div>
+      </div>
       <hr />
       <div class="navbar-menu">
         <router-link to="/dashboard"> <i class="bx bx-home"></i> Dashboard </router-link>
@@ -68,6 +76,28 @@ export default {
 .navbar-logo {
   width: 100px;
   height: 50px;
+}
+
+.user-profile {
+  text-align: center;
+  position: relative;
+  background-image: url("../assets/imagen1.png");
+  background-size: cover;
+  background-position: center;
+  padding: 5px 0;
+  border-radius: 10px;
+}
+
+.profile-picture {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid white;
+}
+
+.user-info {
+  color: white;
+  margin-top: 10px;
 }
 
 .navbar-title {

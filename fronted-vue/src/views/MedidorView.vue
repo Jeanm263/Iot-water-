@@ -89,11 +89,7 @@
         </div>
       </div>
     </div>
-
-    <div class="info-section">
-      <p>Información</p>
-    </div>
-
+<hr>
     <!-- Tabla de información -->
     <div class="table-container">
       <table>
@@ -189,7 +185,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
@@ -291,11 +286,17 @@ export default {
 };
 </script>
 
-
 <style scoped>
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .content {
   padding: 20px;
   text-align: center;
+  min-height: 100vh;
+  background-color: #e0f7fa;
 }
 
 .header {
@@ -340,6 +341,7 @@ td {
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd; /* Línea de separación a la derecha de las celdas */
 }
 
 th {
@@ -375,6 +377,12 @@ th {
   color: white;
 }
 
+/* Eliminar la línea de separación en la última columna */
+th:last-child,
+td:last-child {
+  border-right: none;
+}
+
 /* Modal */
 
 #capa-padre {
@@ -384,8 +392,8 @@ th {
   margin: 5px auto;
   padding: 10px;
   box-shadow: 5px 2px 3px 1px rgba(0, 0, 0, 0.26);
-  font-family: 'Times New Roman', Times, serif;
   font-size: 16px;
+  width: 100%;
   color: black;
 }
 

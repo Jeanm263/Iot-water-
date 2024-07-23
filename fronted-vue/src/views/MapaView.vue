@@ -13,9 +13,9 @@
                   <th>Pais</th>
                   <th>Ciudad</th>
                   <th>Barrio</th>
-                  <th>Calle Principal 4</th>
-                  <th>Calle secundaria</th>
-                  <th>N° de casa</th>
+                  <th>Calle Principal</th>
+                  <th>Calle Secundaria</th>
+                  <th>N° de Casa</th>
                   <th>Nombre Propietario</th>
                   <th>Acciones</th>
               </tr>
@@ -167,6 +167,17 @@ export default {
 </script>
 
 <style scoped>
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.content {
+  padding: 20px;
+  min-height: 100vh; /* Asegura que el contenido cubra al menos la altura de la ventana */
+  background-color: #e0f7fa;
+}
+
 .titulo {
   text-align: center;
   font-family: 'Roboto', sans-serif;

@@ -5,11 +5,6 @@
     <div class="header">
       <p>Consumo y Frecuencia</p>
     </div>
-
-    <div class="info-section">
-      <p>Información</p>
-    </div>
-
     <!-- Contenedor para los gráficos -->
     <div class="chart-container">
       <!-- Gráfico de líneas -->
@@ -23,6 +18,9 @@
       </div>
     </div>
     <hr>
+    <div class="info-section">
+      <p>Información</p>
+    </div>
     <!-- Tabla de consumo -->
     <div class="table-container">
       <table>
@@ -66,9 +64,9 @@ export default {
   },
   setup() {
     const users = ref([
-      { id: 1, name: "Nuevo y bacan", consumoA: "E1-123", consumoB: "E1-123", ciudad: "quito" },
-      { id: 2, name: "Nuevo y bacan", consumoA: "E1-123", consumoB: "E1-123", ciudad: "Guayaquil" },
-      { id: 3, name: "Nuevo y bacan", consumoA: "E1-123", consumoB: "E1-123", ciudad: "Guayas" },
+      { id: 1, name: "Jose Orozco", consumoA: "E1-123", consumoB: "E1-123", ciudad: "quito" },
+      { id: 2, name: "Marco Rojas", consumoA: "E1-123", consumoB: "E1-123", ciudad: "Guayaquil" },
+      { id: 3, name: "juan Veliz", consumoA: "E1-123", consumoB: "E1-123", ciudad: "Guayas" },
     ]);
 
     const lineChartData = ref({
@@ -200,14 +198,22 @@ export default {
 </script>
 
 <style scoped>
+body {
+  height: 100%;
+  margin: 0;
+}
+
+
 .content {
   padding: 20px;
-  text-align: center;
+  min-height: 100vh; /* Asegura que el contenido cubra toda la altura de la ventana */
+  background-color: #e0f7fa;
 }
 
 .header {
   font-size: 24px;
   font-weight: bold;
+  text-align: center;
 }
 
 .create-button {
@@ -251,11 +257,22 @@ td {
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd; /* Línea de separación a la derecha de las celdas */
 }
 
 th {
   background-color: #f2f2f2;
 }
+
+td {
+  border-right: 1px solid #ddd; /* Línea de separación a la derecha de las celdas */
+}
+
+th:last-child,
+td:last-child {
+  border-right: none; /* Elimina la línea de separación en la última columna */
+}
+
 
 .action-button {
   margin: 2px;
@@ -273,5 +290,8 @@ th {
 .action-button.invoice {
   background-color: #28a745;
   color: white;
+}
+.info-section {
+  text-align: center;
 }
 </style>

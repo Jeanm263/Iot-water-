@@ -122,10 +122,11 @@ export default {
   flex: 1;
   transition: 1s;
   background-image: url("/public/img/agua3.png");
-  background-size: cover;
+  background-size: 80%; 
   background-repeat: no-repeat;
   background-position: center;
 }
+
 
 .header > h1 {
   color: #0f7ef1;

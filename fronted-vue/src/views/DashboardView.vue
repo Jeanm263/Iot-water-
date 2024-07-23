@@ -14,8 +14,10 @@
         <canvas id="lineChart"></canvas>
       </div>
     </div>
-
+<hr>
     <!-- Tabla de porcentajes -->
+    <p style="text-align: center;">Consumo</p>
+
     <div class="table-container">
       <table>
         <thead>
@@ -124,8 +126,15 @@ export default {
 </script>
 
 <style scoped>
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .content {
   padding: 20px;
+  min-height: 100vh; /* Asegura que el contenido cubra toda la altura de la ventana */
+  background-color: #e0f7fa; 
 }
 
 .header p {
@@ -178,5 +187,16 @@ td {
 
 th {
   background-color: #f2f2f2;
+  border-right: 1px solid #ddd; 
 }
+
+td {
+  border-right: 1px solid #ddd; 
+}
+
+th:last-child,
+td:last-child {
+  border-right: none;
+}
+
 </style>
