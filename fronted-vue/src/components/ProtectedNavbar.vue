@@ -10,7 +10,7 @@
       <div class="user-profile">
         <img src="../assets/usuario.png" alt="User Profile" class="profile-picture" />
         <div class="user-info">
-          <p>Sean Ngu</p>
+          <p>Pepito Perez</p>
           <p>Frontend developer</p>
         </div>
       </div>

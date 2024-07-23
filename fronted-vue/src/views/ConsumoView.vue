@@ -43,7 +43,7 @@
             <td>{{ user.ciudad }}</td>
             <td>
               <button class="action-button update" @click="updateCharts">Actualizar</button>
-              <button class="action-button invoice" @click="invoiceUser(user.id)">Factura</button>
+              <button type="button" class="action-button invoice" @click="$router.push('/show-invoice/:userId')">Factura</button>
             </td>
           </tr>
         </tbody>

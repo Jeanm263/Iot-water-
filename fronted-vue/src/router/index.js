@@ -7,7 +7,7 @@ import ConsumoView from '@/views/ConsumoView.vue'
 import GatewayView from '@/views/GatewayView.vue'
 import MapaView from '@/views/MapaView.vue'
 import MedidorView from '@/views/MedidorView.vue'
-
+import ShowInvoice from '@/views/ShowInvoice.vue'
 
 
 const routes = [
@@ -26,7 +26,7 @@ const routes = [
     name: 'login',
     component: LoginView
   },
-  // todo la rutas del administrador
+  //la rutas del administrador
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -62,6 +62,12 @@ const routes = [
     name: 'medidor',
     component: MedidorView,
     meta:  { requiresAuth:true }
+  },
+  {
+    path: '/show-invoice/:userId',
+    name: 'ShowInvoice',
+    component: ShowInvoice,
+    props: true,
   }
 ]
 
