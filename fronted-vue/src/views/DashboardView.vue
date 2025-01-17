@@ -2,84 +2,147 @@
   <ProtectedNavbar />
 
   <div class="content">
-    <!-- Contenedor para los gráficos -->
-    <div class="chart-container">
-      <!-- Gráfico de barras -->
-      <div class="chart-item">
-        <canvas id="barChart"></canvas>
-      </div>
+    <!-- Encabezado -->
+    <div class="header">
+      <h1>Bienvenido <span class="username">Username</span></h1>
+      <p>Accesos directos y estadísticas</p>
+    </div>
 
-      <!-- Gráfico de líneas -->
-      <div class="chart-item larger-chart">
-        <canvas id="lineChart"></canvas>
+    <!-- Filtros -->
+    <div class="filter-container">
+      <select v-model="selectedFilter" @change="applyFilter">
+        <option value="all">Todos</option>
+        <option value="active">Activos</option>
+        <option value="inactive">Inactivos</option>
+      </select>
+    </div>
+
+    <!-- Tarjetas de estadísticas -->
+    <div class="stats-container">
+      <div class="stat-card" @mouseover="showDetails('medidores')" @mouseleave="hideDetails" @click="navigateToDetails('medidores')">
+        <p>MEDIDORES ACTIVOS</p>
+        <h2>{{ stats.medidores }}</h2>
+        <span class="icon">💧</span>
+        <a href="#">Ver más detalles ➔</a>
+        <div v-if="detailsVisible === 'medidores'" class="tooltip">Detalles sobre medidores activos</div>
+      </div>
+      <div class="stat-card" @mouseover="showDetails('gateways')" @mouseleave="hideDetails" @click="navigateToDetails('gateways')">
+        <p>GATEWAYS ACTIVOS</p>
+        <h2>{{ stats.gateways }}</h2>
+        <span class="icon">🌐</span>
+        <a href="#">Ver más detalles ➔</a>
+        <div v-if="detailsVisible === 'gateways'" class="tooltip">Detalles sobre gateways activos</div>
+      </div>
+      <div class="stat-card" @mouseover="showDetails('consumo')" @mouseleave="hideDetails" @click="navigateToDetails('consumo')">
+        <p>CONSUMO HOY</p>
+        <h2>{{ stats.consumo }}</h2>
+        <span class="icon">📊</span>
+        <a href="#">Ver más detalles ➔</a>
+        <div v-if="detailsVisible === 'consumo'" class="tooltip">Detalles sobre consumo hoy</div>
+      </div>
+      <div class="stat-card" @mouseover="showDetails('clientes')" @mouseleave="hideDetails" @click="navigateToDetails('clientes')">
+        <p>CLIENTES</p>
+        <h2>{{ stats.clientes }}</h2>
+        <span class="icon">👤</span>
+        <a href="#">Ver más detalles ➔</a>
+        <div v-if="detailsVisible === 'clientes'" class="tooltip">Detalles sobre clientes</div>
       </div>
     </div>
-<hr>
-    <!-- Tabla de porcentajes -->
-    <p style="text-align: center;">Consumo</p>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Porcentaje</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="data in percentageData" :key="data.id">
-            <td>{{ data.id }}</td>
-            <td>{{ data.name }}</td>
-            <td>{{ data.percentage }}%</td>
-          </tr>
-        </tbody>
-      </table>
+    <hr />
+
+    <!-- Gráficos y ubicación -->
+    <div class="charts-container">
+      <div class="chart-item fade-in">
+        <h3>Estadística de consumo de agua por mes</h3>
+        <canvas id="lineChart" @click="showChartDetails"></canvas>
+      </div>
+      <div class="chart-item fade-in">
+        <h3>Ubicación</h3>
+        <input type="text" placeholder="Ingrese el ID del medidor" @keypress.enter="searchLocation" />
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.257897529596!2d-99.16397782541112!3d19.43260763918001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1f92de6489c4b%3A0x9bd83c23c150f5e!2sPalacio%20de%20Bellas%20Artes!5e0!3m2!1sen!2smx!4v1678303774894!5m2!1sen!2smx"
+          width="100%"
+          height="300"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
     </div>
+
+    <div v-if="notification" class="notification">{{ notification }}</div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import Chart from "chart.js/auto";
 import ProtectedNavbar from "../components/ProtectedNavbar.vue";
 
 export default {
-  name: "iot",
+  name: "Dashboard",
   components: {
     ProtectedNavbar,
   },
   setup() {
-    const percentageData = ref([
-      { id: 1, name: "Categoria A", percentage: 25 },
-      { id: 2, name: "Categoria B", percentage: 35 },
-      { id: 3, name: "Categoria C", percentage: 40 },
-    ]);
-
-    const lineChartData = ref({
-      labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo"],
-      datasets: [
-        {
-          label: "Consumo",
-          data: [10, 20, 30, 40, 50],
-          borderColor: "#36A2EB",
-          backgroundColor: "rgba(54, 162, 235, 0.2)",
-          fill: true,
-        },
-      ],
+    const detailsVisible = ref(null);
+    const selectedFilter = ref("all");
+    const notification = ref("");
+    const stats = ref({
+      medidores: 784200,
+      gateways: 784200,
+      consumo: 784200,
+      clientes: 784200,
     });
 
+    const showDetails = (type) => {
+      detailsVisible.value = type;
+    };
+
+    const hideDetails = () => {
+      detailsVisible.value = null;
+    };
+
+    const navigateToDetails = (type) => {
+      notification.value = `Navegando a detalles de ${type}`;
+      setTimeout(() => {
+        notification.value = ""; // Eliminar notificación después de 2 segundos
+      }, 2000);
+    };
+
+    const applyFilter = () => {
+      notification.value = `Filtro aplicado: ${selectedFilter.value}`;
+      setTimeout(() => {
+        notification.value = ""; // Eliminar notificación después de 2 segundos
+      }, 2000);
+    };
+
+    const showChartDetails = () => {
+      notification.value = "Mostrando detalles del gráfico";
+      setTimeout(() => {
+        notification.value = ""; // Eliminar notificación después de 2 segundos
+      }, 2000);
+    };
+
+    const searchLocation = () => {
+      alert("Buscando ubicación...");
+    };
+
     onMounted(() => {
-      const barCtx = document.getElementById("barChart").getContext("2d");
-      new Chart(barCtx, {
-        type: "bar",
+      const lineCtx = document.getElementById("lineChart").getContext("2d");
+      new Chart(lineCtx, {
+        type: "line",
         data: {
-          labels: percentageData.value.map((data) => data.name),
+          labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo"],
           datasets: [
             {
-              label: "Porcentaje",
-              data: percentageData.value.map((data) => data.percentage),
-              backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+              label: "Consumo",
+              data: [10, 20, 30, 40, 50],
+              borderColor: "#36A2EB",
+              backgroundColor: "rgba(54, 162, 235, 0.2)",
+              fill: true,
             },
           ],
         },
@@ -90,113 +153,175 @@ export default {
               position: "top",
             },
           },
-          scales: {
-            x: {
-              barPercentage: 0.5,
-              categoryPercentage: 0.5,
-            },
-          },
-        },
-      });
-
-      const lineCtx = document.getElementById("lineChart").getContext("2d");
-      new Chart(lineCtx, {
-        type: "line",
-        data: lineChartData.value,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top",
-            },
-          },
         },
       });
     });
 
-    return { percentageData, lineChartData };
-  },
-  methods: {
-    logout() {
-      localStorage.removeItem("token");
-      this.$router.push("/login");
-    },
+    return {
+      detailsVisible,
+      showDetails,
+      hideDetails,
+      navigateToDetails,
+      applyFilter,
+      selectedFilter,
+      searchLocation,
+      showChartDetails,
+      notification,
+      stats,
+    };
   },
 };
 </script>
 
 <style scoped>
 body {
-  height: 100%;
+  font-family: Arial, sans-serif;
   margin: 0;
+  background-color: #eaf6fc;
 }
 
 .content {
   padding: 20px;
-  min-height: 100vh; /* Asegura que el contenido cubra toda la altura de la ventana */
-  background-color: #e0f7fa; 
+  margin-left: 200px; /* Ajustamos el margen para que el contenido no se tape con la barra lateral */
+  max-width: 1100px; /* Reducción del ancho máximo */
+  margin: 60px auto 0; /* Ajustado para mover el contenido hacia abajo */
 }
 
-.header p {
-  font-size: 24px;
-  font-weight: bold;
+.header h1 {
+  font-size: 1.8rem; /* Reducido para ser más pequeño */
+  color: #333;
 }
 
-.chart-container {
-  margin-top: 20px;
+.header .username {
+  color: #007bff;
+}
+
+.filter-container {
+  margin-bottom: 15px;
+}
+
+.stats-container {
   display: flex;
-  justify-content: space-around; /* Alineación de los gráficos */
+  justify-content: space-between;
+  gap: 15px; /* Reducido para ser más compacto */
+  margin: 15px 0; /* Reducido para ser más compacto */
+}
+
+.stat-card {
+  background: white;
+  padding: 10px; /* Reducido para ser más compacto */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  flex: 1;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background-color: #d1ecf1; /* Color de fondo al pasar el mouse */
+}
+
+.stat-card p {
+  font-size: 0.85rem; /* Reducido para ser más compacto */
+  color: #555;
+}
+
+.stat-card h2 {
+  font-size: 1.3rem; /* Reducido para ser más compacto */
+  margin: 10px 0;
+}
+
+.stat-card .icon {
+  font-size: 1.3rem; /* Reducido para ser más compacto */
+  color: #007bff;
+}
+
+.stat-card a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.75rem; /* Reducido para ser más compacto */
+}
+
+.tooltip {
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 10;
+  margin-top: -30px;
+}
+
+.charts-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px; /* Reducido para ser más compacto */
 }
 
 .chart-item {
-  width: 50%; /* Ajusta el tamaño de cada gráfico */
-}
-
-.larger-chart {
-  width: 50%; /* Ajusta el tamaño del gráfico de líneas para que sea más grande */
-}
-
-canvas {
-  width: 100% !important; /* Asegura que el canvas llene su contenedor */
-  height: auto !important; /* Asegura que el canvas mantenga la proporción */
-}
-
-.table-container {
-  margin-top: 20px;
-  border: 1px solid #ddd;
+  flex: 1;
+  background: white;
+  padding: 10px; /* Reducido para ser más compacto */
   border-radius: 8px;
-  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-item h3 {
+  margin-bottom: 10px; /* Reducido para ser más compacto */
+  font-size: 0.9rem; /* Reducido para ser más compacto */
+}
+
+.chart-item.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+iframe {
+  border-radius: 8px;
+}
+
+.notification {
+  background: #007bff;
+  color: #fff;
   padding: 10px;
-  width: 80%; /* Ajusta el tamaño de la tabla */
-  max-width: 800px; /* Ajusta el tamaño máximo de la tabla */
-  margin-left: auto;
-  margin-right: auto; /* Centra horizontalmente */
+  border-radius: 5px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  transition: opacity 0.5s;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0; /* Elimina el margen izquierdo en móviles */
+    padding: 10px; /* Reduce el padding en móviles */
+  }
 
-th,
-td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
+  .stats-container {
+    flex-direction: column; /* Cambia a columna en móviles */
+  }
 
-th {
-  background-color: #f2f2f2;
-  border-right: 1px solid #ddd; 
-}
+  .charts-container {
+    flex-direction: column; /* Cambia a columna en móviles */
+  }
 
-td {
-  border-right: 1px solid #ddd; 
-}
+  .stat-card {
+    margin-bottom: 10px; /* Espacio entre tarjetas en móviles */
+  }
 
-th:last-child,
-td:last-child {
-  border-right: none;
+  .chart-item {
+    margin-bottom: 10px; /* Espacio entre gráficos en móviles */
+  }
 }
-
 </style>

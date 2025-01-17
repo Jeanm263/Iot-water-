@@ -121,7 +121,7 @@ export default {
 .right {
   flex: 1;
   transition: 1s;
-  background-image: url("/public/img/agua3.png");
+  background-image: url("/public/img/agua5.png");
   background-size: 80%; 
   background-repeat: no-repeat;
   background-position: center;

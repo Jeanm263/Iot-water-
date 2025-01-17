@@ -4,10 +4,12 @@ import RegistroView from '@/views/RegistreView.vue'
 import LoginView from '@/views/LoginView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import ConsumoView from '@/views/ConsumoView.vue'
-import GatewayView from '@/views/GatewayView.vue'
+import GatewayView from '@/views/Añadirgateway.vue'
 import MapaView from '@/views/MapaView.vue'
-import MedidorView from '@/views/MedidorView.vue'
+import MedidorView from '@/views/RegisterMedidor.vue'
 import ShowInvoice from '@/views/ShowInvoice.vue'
+import Editargateway from '@/views/Editargateway.vue'
+import Detalles from '@/views/Detalles.vue'
 
 
 const routes = [
@@ -31,13 +33,7 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: DashboardView,
-    meta: { requiresAuth: true }
+
   },
   {
     path: '/consumo',
@@ -46,8 +42,8 @@ const routes = [
     meta: { requiresAuth: true}
   },
   {
-    path: '/gateway',
-    name: 'gateway',
+    path: '/add-gateway',
+    name: 'Añadirgateway',
     component: GatewayView,
     meta: { requiresAuth: true }
   },
@@ -58,8 +54,8 @@ const routes = [
     meta:  { requiresAuth:true }
   },
   {
-    path: '/medidor',
-    name: 'medidor',
+    path: '/add-medidor',
+    name: 'RegistrarMedidor',
     component: MedidorView,
     meta:  { requiresAuth:true }
   },
@@ -68,6 +64,18 @@ const routes = [
     name: 'ShowInvoice',
     component: ShowInvoice,
     props: true,
+  },
+  {
+    path: '/edit-gateway/',
+    name: 'Editargateway',
+    component: Editargateway,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/info-medidor/',
+    name: 'Detalles',
+    component: Detalles,
+    meta: { requiresAuth: true }
   }
 ]
 
