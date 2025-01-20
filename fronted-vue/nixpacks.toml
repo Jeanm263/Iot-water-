@@ -2,10 +2,10 @@
 commands = ["cd front-vue"]
 
 [phases.install]
-commands = ["npm install"]
+commands = ["cd front-vue && npm install"]
 
 [phases.build]
-commands = ["npm run build"]
+commands = ["cd front-vue && npm run build"]
 
 [phases.start]
-commands = ["npm run serve"] # Cambia según el script que uses para producción
+commands = ["cd front-vue && npm run serve"] # Asegúrate de que este comando inicie el servidor
