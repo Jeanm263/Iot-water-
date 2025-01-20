@@ -3,7 +3,7 @@
 
   <div class="content">
     <div class="header">
-      <h1>Medidor</h1>
+      <h1>Gateway</h1>
     </div>
 
     <div class="main-card">

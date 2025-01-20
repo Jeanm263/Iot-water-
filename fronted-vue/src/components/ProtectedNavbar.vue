@@ -60,7 +60,7 @@ export default {
           items: [
             { path: '/add-gateway', label: 'Añadir nuevo gateway' },
             { path: '/edit-gateway', label: 'Editar gateway existente' },
-            { path: '/delete-gateway', label: 'Eliminar un gateway' },
+            { path: '/detalle-gateway', label: 'Detalles de gateway' },
           ],
         },
         medidores: {

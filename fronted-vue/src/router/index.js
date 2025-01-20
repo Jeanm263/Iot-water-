@@ -10,7 +10,10 @@ import MedidorView from '@/views/RegisterMedidor.vue'
 import ShowInvoice from '@/views/ShowInvoice.vue'
 import Editargateway from '@/views/Editargateway.vue'
 import Detalles from '@/views/Detalles.vue'
-
+import Detallesgateways from '@/views/Detallesgateways.vue'
+import Editarmedidor from '@/views/Editarmedidor.vue'
+import Usuarios from '@/views/Añadirusuario.vue'
+import EditarUsuario from '@/views/Editarusuario.vue'
 
 const routes = [
   {
@@ -76,7 +79,31 @@ const routes = [
     name: 'Detalles',
     component: Detalles,
     meta: { requiresAuth: true }
-  }
+  },
+  {
+    path: '/detalle-gateway/',
+    name: 'Detallesgateways',
+    component: Detallesgateways,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/edit-medidor/',
+    name: 'Editarmedidor',
+    component: Editarmedidor,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/add-usuario',
+    name: 'Añadirusuario',
+    component: Usuarios,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/edit-usuario',
+    name: 'Editarusuario',
+    component: EditarUsuario,
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({

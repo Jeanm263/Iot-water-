@@ -40,34 +40,6 @@
           </table>
         </transition>
 
-        <!-- Modal para Nuevo Gateway -->
-        <MyModal :isVisible="showForm" @close="closeFormModal">
-          <h2 class="modal-title">Nuevo Gateway</h2>
-          <form @submit.prevent="registerGateway" class="gateway-form">
-            <div class="form-group">
-              <label for="gatewayId">ID del Gateway</label>
-              <input type="text" v-model="gatewayId" id="gatewayId" required />
-            </div>
-            <div class="form-group">
-              <label for="location">Ubicación</label>
-              <input type="text" v-model="location" id="location" required />
-            </div>
-            <div class="form-group">
-              <label for="initialState">Estado</label>
-              <select v-model="initialState" id="initialState" required>
-                <option value="" disabled>Selecciona un estado</option>
-                <option value="activo">Activo</option>
-                <option value="inactivo">Inactivo</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="configDate">Fecha de Configuración</label>
-              <input type="date" v-model="configDate" id="configDate" required />
-            </div>
-            <button type="submit" class="register-button">Registrar</button>
-          </form>
-        </MyModal>
-
         <!-- Modal para Editar Gateway -->
         <MyModal :isVisible="isEditModalVisible" @close="closeEditModal">
           <h2 class="modal-title">Editar Gateway</h2>
@@ -94,7 +66,6 @@
             <button type="submit" class="register-button">Actualizar</button>
           </form>
         </MyModal>
-
       </div>
     </div>
   </div>
@@ -118,39 +89,8 @@ export default {
       { gatewayId: '3', location: 'Sucursal Sur', initialState: 'activo', configDate: '2023-03-20' },
     ]);
 
-    const gatewayId = ref('');
-    const location = ref('');
-    const initialState = ref('activo');
-    const configDate = ref('');
-    const showForm = ref(false);
-
-    // Para editar
     const isEditModalVisible = ref(false);
     const editGateway = ref({});
-
-    const registerGateway = () => {
-      const gatewayData = {
-        gatewayId: gatewayId.value,
-        location: location.value,
-        initialState: initialState.value,
-        configDate: configDate.value,
-      };
-
-      gateways.value.push(gatewayData);
-      resetForm();
-    };
-
-    const resetForm = () => {
-      gatewayId.value = '';
-      location.value = '';
-      initialState.value = 'activo';
-      configDate.value = '';
-      showForm.value = false;
-    };
-
-    const closeFormModal = () => {
-      showForm.value = false;
-    };
 
     const removeGateway = (id) => {
       gateways.value = gateways.value.filter(gateway => gateway.gatewayId !== id);
@@ -173,7 +113,7 @@ export default {
       closeEditModal();
     };
 
-    return { gateways, gatewayId, location, initialState, configDate, registerGateway, showForm, closeFormModal, removeGateway, openEditModal, isEditModalVisible, closeEditModal, editGateway, updateGateway };
+    return { gateways, removeGateway, openEditModal, isEditModalVisible, closeEditModal, editGateway, updateGateway };
   },
 };
 </script>
