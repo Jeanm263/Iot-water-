@@ -1,28 +1,33 @@
 <template>
   <div class="layout">
-    <nav class="protected-navbar sidebar">
-      <div class="navbar-brand profile">
-        <router-link to="/dashboard">
-          <img src="../assets/logo.png" alt="IOT WATER logo" class="navbar-logo" />
-        </router-link>
-      </div>
-      <hr>
-      <div class="user-profile">
-        <img src="../assets/usuario.png" alt="User Profile" class="profile-picture" />
-        <div class="user-info">
-          <p>Pepito Perez</p>
-          <p>Frontend developer</p>
-        </div>
-      </div>
-      <hr />
+    <Topbar @toggle-sidebar="toggleSidebar" />
+    <button @click="toggleSidebar" class="hamburger">
+      <i class="bx" :class="isSidebarVisible ? 'bx-x' : 'bx-menu'"></i>
+    </button>
+    <nav :class="['protected-navbar sidebar', { 'sidebar-hidden': !isSidebarVisible }]">
       <div class="navbar-menu">
-        <router-link to="/dashboard"> <i class="bx bx-home"></i> Dashboard </router-link>
-        <router-link to="/medidor"> <i class="bx bx-home"></i> Medidor </router-link>
-        <router-link to="/consumo"> <i class="bx bx-stats"></i> Consumo </router-link>
-        <router-link to="/gateway"> <i class="bx bx-news"></i> Gateway </router-link>
-        <router-link to="/Mapa"> <i class="bx bx-news"></i> Mapa </router-link>
+        <div class="menu-items">
+          <router-link v-for="route in routes" :key="route.path" :to="route.path" class="menu-item">
+            <i :class="route.icon"></i> {{ route.label }}
+          </router-link>
 
-        <button @click="logout"><i class="bx bx-log-out"></i> Cerrar Sesión</button>
+          <div v-for="(route, key) in dropdownRoutes" :key="key" class="dropdown">
+            <span @click="toggleDropdown(key)" class="dropdown-toggle">
+              <i :class="route.icon"></i> {{ route.label }}
+            </span>
+            <div :class="['dropdown-content', { open: isDropdownOpen[key] }]">
+              <router-link v-for="item in route.items" :key="item.path" :to="item.path" class="dropdown-item">
+                {{ item.label }}
+              </router-link>
+            </div>
+          </div>
+        </div>
+
+        <div class="logout-btn">
+          <button @click="logout" class="logout-button">
+            <i class="bx bx-log-out"></i> Cerrar Sesión
+          </button>
+        </div>
       </div>
     </nav>
   </div>
@@ -30,9 +35,71 @@
 
 <script>
 import Swal from "sweetalert2";
+import Topbar from './Topbar.vue';
 
 export default {
+  components: {
+    Topbar,
+  },
+  data() {
+    return {
+      isSidebarVisible: true,
+      isDropdownOpen: {
+        gateways: false,
+        medidores: false,
+        clientes: false,
+        usuarios: false,
+      },
+      routes: [
+        { path: '/dashboard', label: 'Dashboard', icon: 'bx bx-home' },
+      ],
+      dropdownRoutes: {
+        gateways: {
+          label: 'Gateways',
+          icon: 'bx bx-news',
+          items: [
+            { path: '/add-gateway', label: 'Añadir nuevo gateway' },
+            { path: '/edit-gateway', label: 'Editar gateway existente' },
+            { path: '/detalle-gateway', label: 'Detalles de gateway' },
+          ],
+        },
+        medidores: {
+          label: 'Medidores',
+          icon: 'bx bx-tachometer',
+          items: [
+            { path: '/add-medidor', label: 'Añadir nuevo medidor' },
+            { path: '/edit-medidor', label: 'Editar medidor existente' },
+            { path: '/info-medidor', label: 'Detalle de Medidor' },
+          ],
+        },
+        clientes: {
+          label: 'Clientes',
+          icon: 'bx bx-user',
+          items: [
+            { path: '/add-cliente', label: 'Añadir nuevo cliente' },
+            { path: '/edit-cliente', label: 'Editar cliente existente' },
+            { path: '/delete-cliente', label: 'Eliminar un cliente' },
+          ],
+        },
+        usuarios: {
+          label: 'Usuarios',
+          icon: 'bx bx-group',
+          items: [
+            { path: '/add-usuario', label: 'Añadir nuevo usuario' },
+            { path: '/edit-usuario', label: 'Editar usuario existente' },
+            { path: '/delete-usuario', label: 'Eliminar un usuario' },
+          ],
+        },
+      }
+    };
+  },
   methods: {
+    toggleSidebar() {
+      this.isSidebarVisible = !this.isSidebarVisible;
+    },
+    toggleDropdown(dropdown) {
+      this.isDropdownOpen[dropdown] = !this.isDropdownOpen[dropdown];
+    },
     logout() {
       Swal.fire({
         title: "¿Estás seguro?",
@@ -54,56 +121,42 @@ export default {
 };
 </script>
 
-<style>
-.sidebar {
-  font-family: "Times New Roman", Times, serif;
-  width: 250px;
-  background-color: #20252a;
-  color: white;
-  height: 100vh;
-  position: fixed;
+<style scoped>
+.layout {
   display: flex;
   flex-direction: column;
 }
 
-.profile {
-  margin: 10px;
-  text-align: center;
-  background-color: #cfcfcf23;
-  border-radius: 10px;
-}
-
-.navbar-logo {
-  width: 100px;
-  height: 50px;
-}
-
-.user-profile {
-  text-align: center;
-  position: relative;
-  background-image: url("../assets/imagen1.png");
-  background-size: cover;
-  background-position: center;
-  padding: 5px 0;
-  border-radius: 10px;
-}
-
-.profile-picture {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 3px solid white;
-}
-
-.user-info {
+.hamburger {
+  position: absolute;
+  top: 70px; /* Ajustado para estar más abajo */
+  left: 15px;
+  background: #1e3a8a; /* Color de fondo del botón */
+  border: none;
   color: white;
-  margin-top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+  padding: 10px;
+  border-radius: 5px; /* Bordes redondeados */
 }
 
-.navbar-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #ffffff;
+.sidebar {
+  font-family: "Times New Roman", Times, serif;
+  width: 220px;
+  background-color: #003B73; /* Color de fondo */
+  color: white;
+  height: calc(100vh - 50px);
+  position: fixed;
+  top: 50px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.sidebar-hidden {
+  transform: translateX(-100%);
 }
 
 .navbar-menu {
@@ -112,38 +165,89 @@ export default {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  color: white;
+  justify-content: space-between;
 }
 
-.navbar-menu a {
+.menu-item,
+.dropdown-toggle {
   text-decoration: none;
   padding: 15px 20px;
   display: block;
   color: white;
-}
-
-.navbar-menu a:hover,
-.navbar-menu button:hover {
-  background-color: #34495e;
-}
-
-.navbar-menu button {
-  background: none;
-  border: none;
-  color: white;
-  text-align: left;
-  padding: 10px 20px;
   cursor: pointer;
-  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.navbar-menu button:focus {
-  outline: none;
+.menu-item:hover,
+.dropdown-toggle:hover {
+  background-color: #1a5276;
+  transform: scale(1.05);
 }
 
-.content {
-  margin-left: 250px;
+.dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.dropdown-content.open {
+  max-height: 500px;
+  padding: 10px 0;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  color: white;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #1a5276;
+}
+
+.logout-btn {
   padding: 20px;
-  width: calc(100% - 250px);
+}
+
+.logout-button {
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #a93226;
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px; /* Anchura del sidebar en móviles */
+  }
+
+  .sidebar-hidden {
+    transform: translateX(-100%);
+  }
+
+  .navbar-menu {
+    flex-direction: column;
+  }
+
+  .navbar-menu a,
+  .navbar-menu button {
+    padding: 10px;
+    width: 100%;
+  }
+
+  .dropdown-content {
+    position: static;
+    width: 100%;
+  }
 }
 </style>
